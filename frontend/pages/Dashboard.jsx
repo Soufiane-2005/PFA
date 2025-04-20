@@ -50,7 +50,7 @@ export function Dashboard(){
         <div>je suis dans le dashboard</div>
 
 
-        <button onClick={handleLogout}>se </button>
+        <button onClick={handleLogout}>se deconnecter</button>
         </>
 
     )
