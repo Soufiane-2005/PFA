@@ -51,3 +51,9 @@
 .btn-notifs {
     background-color: #DC3545;
 }
+
+.btn-enseignements {
+    background-color: #dc3586;
+    position: relative;
+    left: 150px;
+}

@@ -22,10 +22,10 @@ export function Adminbutton() {
                     Enseignant
                 </button>
                 <button 
-                    onClick={() => handleRedirect('ClasseEtudiant')} 
+                    onClick={() => handleRedirect('Modules')} 
                     className="btn btn-classe"
                 >
-                    Classe d'étudiant
+                    Modules
                 </button>
                 <button 
                     onClick={() => handleRedirect('Alerts')} 
@@ -38,6 +38,12 @@ export function Adminbutton() {
                     className="btn btn-notifs"
                 >
                     Notifications
+                </button>
+                     <button 
+                    onClick={() => handleRedirect('Enseignement')} 
+                    className="btn btn-enseignements"
+                >
+                    Enseignements
                 </button>
             </div>
         </div>

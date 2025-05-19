@@ -1,5 +1,5 @@
 
-import { Register } from '../pages/register'
+import { Register } from '../pages/Register'
 import './App.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import {Login} from '../pages/Login'
@@ -11,7 +11,10 @@ import { Enseignant } from '../pages/Admin/Enseignant'
 import { Notifications } from '../pages/Admin/Notifications'
 import { Alerts } from '../pages/Admin/Alerts'
 import { Modifierinfo } from '../pages/Admin/Modifierinfo'
-import { Classetudiant } from '../pages/Admin/Classetudiant'
+import { Modules } from '../pages/Admin/Modules'
+import { UserAlerts } from '../pages/Users/UserAlerts'
+import {UserNotifications} from '../pages/Users/UserNotifications'
+import { Enseignement } from '../pages/Admin/Enseignement'
 
 
 function App() {
@@ -49,8 +52,24 @@ function App() {
             <Route path='/Admin/modifier-info' element={<ProtectedRoute allowedRoles={['admin']}>
                   <Modifierinfo/>
             </ProtectedRoute>}></Route>
-            <Route path='/Admin/ClasseEtudiant' element={<ProtectedRoute allowedRoles={['admin']}>
-                  <Classetudiant/>
+            <Route path='/Admin/Modules' element={<ProtectedRoute allowedRoles={['admin']}>
+                  <Modules/>
+            </ProtectedRoute>}></Route>
+            <Route path='/Admin/Enseignement' element={<ProtectedRoute allowedRoles={['admin']}>
+                  <Enseignement/>
+            </ProtectedRoute>}></Route>
+
+
+            <Route path='/dashboard/modifier-info' element={<ProtectedRoute allowedRoles={['enseignant', 'etudiant']}>
+            <Modifierinfo/>
+            </ProtectedRoute>}></Route>
+
+            <Route path='/dashboard/User-alerts' element={<ProtectedRoute allowedRoles={['enseignant', 'etudiant']}>
+            <UserAlerts/>
+            </ProtectedRoute>}></Route>
+
+            <Route path='/dashboard/User-notifications' element={<ProtectedRoute allowedRoles={['enseignant', 'etudiant']}>
+            <UserNotifications/>
             </ProtectedRoute>}></Route>
 
 

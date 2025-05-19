@@ -8,12 +8,12 @@ const router = express.Router()
 require('dotenv').config()
 
 router.post('/register', async (req, res)=>{
-    const {prenom, email, password} = req.body
-    const query = 'INSERT INTO users (prenom, email, password, role) values (?,?,?,?)'
+    const {nom, prenom, email, password} = req.body
+    const query = 'INSERT INTO users (nom, prenom, email, password, role) values (?,?,?,?,?)'
 
     const hashpassword = await bcrypt.hash(password, 10)
 
-    connection.query(query, [prenom, email, hashpassword, "etudiant"], (err, result)=>{
+    connection.query(query, [nom, prenom, email, hashpassword, "etudiant"], (err, result)=>{
         if(err){
             return res.status(500).json({message: 'une erreur de serveur'})
         }else{
@@ -24,6 +24,7 @@ router.post('/register', async (req, res)=>{
     })
 
 })
+
 
 
 router.post('/login',(req, res)=>{
@@ -41,12 +42,12 @@ router.post('/login',(req, res)=>{
                 return res.status(500).json({message: "le mots passe est incorrecte", password: user.password})
             }else{
                 const token = jwt.sign({userId : user.id,
+                    prenom: user.prenom,
                     nom: user.nom,
                     role: user.role,
                     email: user.email,
                     prenom: user.prenom,
                     numero_tele: user.numero_telephone}, process.env.secret_key, {expiresIn: '1h'})
-                console.log(user)
                 res.cookie("token", token, {
                     httpOnly: false,
                     secure: false,
@@ -97,7 +98,7 @@ router.post('/login/Admin', isAuthenticated, async (req, res)=>{
 
 
 
-// cette partie est commun par tous les utilisateurs:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+// cette partie est commun pour tous les utilisateurs:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 router.post('/logout', (req, res) => {
     res.clearCookie("token", {
       httpOnly: true,
@@ -113,7 +114,7 @@ router.post('/logout', (req, res) => {
 router.put('/modifier-info', isAuthenticated, (req,res)=>{
     const {prenom, nom, email, numero_telephone} = req.body;
     const id = req.user.userId
-    console.log(id)
+    
     const query2 = 'UPDATE users SET prenom = ?, nom = ?, email = ?, numero_telephone = ? WHERE id = ?';
     const query1 = 'Select * from users where id = ?'
     connection.query(query1, [id], (err, result)=>{
@@ -149,7 +150,7 @@ router.put('/modifier-info', isAuthenticated, (req,res)=>{
 
 //ajouter des enseignant: 
 router.post('/AjouterEnseignant', isAuthenticated, async (req, res) => {
-    const { prenom, email, password } = req.body;
+    const {nom, prenom, email, password } = req.body;
 
     const checkQuery = 'SELECT * FROM users WHERE email = ?';
     connection.query(checkQuery, [email], async (checkErr, results) => {
@@ -162,9 +163,9 @@ router.post('/AjouterEnseignant', isAuthenticated, async (req, res) => {
         }
 
         const hashpassword = await bcrypt.hash(password, 10);
-        const insertQuery = 'INSERT INTO users (prenom, email, password, role) VALUES (?, ?, ?, ?)';
+        const insertQuery = 'INSERT INTO users (nom, prenom, email, password, role) VALUES (?, ?, ?, ?, ?)';
 
-        connection.query(insertQuery, [prenom, email, hashpassword, "enseignant"], (err, result) => {
+        connection.query(insertQuery, [nom, prenom, email, hashpassword, "enseignant"], (err, result) => {
             if (err) {
                 return res.status(500).json({ message: 'Erreur serveur lors de l\'insertion.' });
             } else {
@@ -180,24 +181,23 @@ router.post('/AjouterEnseignant', isAuthenticated, async (req, res) => {
 //modifier enseignant: 
 
 router.put('/ModifierEnseignant', isAuthenticated, (req, res) => {
-    const { prenom, email } = req.body;
+    const {nom, prenom, ancienEmail, email} = req.body;
 
-   
     const checkQuery = 'SELECT * FROM users WHERE email = ? AND role = "enseignant"';
     
-    connection.query(checkQuery, [email], (err, results) => {
+    connection.query(checkQuery, [ancienEmail], (err, results) => {
         if (err) {
             return res.status(500).json({ message: 'Erreur serveur lors de la vérification' });
         }
-
+        
         if (results.length === 0) {
             return res.status(404).json({ message: "Aucun enseignant trouvé avec cet email." });
         }
 
         
-        const updateQuery = 'UPDATE users SET prenom = ? WHERE email = ? AND role = "enseignant"';
+        const updateQuery = 'UPDATE users SET nom = ? , prenom = ?, email = ? WHERE email = ? AND role = "enseignant"';
         
-        connection.query(updateQuery, [prenom, email], (err, result) => {
+        connection.query(updateQuery, [nom, prenom, email, ancienEmail], (err, result) => {
             if (err) {
                 return res.status(500).json({ message: 'Erreur serveur lors de la mise à jour' });
             } else {
@@ -391,7 +391,101 @@ router.put('/Notifications/:id', isAuthenticated, (req, res)=>{
 })
 
 
+
 //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+
+
+
+
+// cette partie est pour l'ajout des modules: 
+
+router.post('/Modules', isAuthenticated, (req,res)=>{
+    const {nom}= req.body
+    const query = 'INSERT INTO Modules (nom) values (?)'
+    console.log(nom)
+    connection.query(query, [nom], (err, result)=>{
+        if(err){
+            return res.status(400).json({message: "il y'a une erreur lors de l'insertion de modules"})
+        }
+        return res.status(200).json({message: 'le module a ete bien inscrit!'})
+
+    })
+})
+
+
+
+// c'est partie c'est pour l'enseignement:
+router.get('/Enseignement', isAuthenticated, (req, res) => {
+    const query = "SELECT id, email FROM USERS WHERE ROLE = 'Enseignant'";
+    connection.query(query, (err, result) => {
+        if (err) return res.status(400).json({ message: "Erreur lors de l'affichage des enseignants" });
+        return res.status(200).json(result);
+    });
+});
+
+
+router.get('/Modules', isAuthenticated, (req, res) => {
+    const query = "SELECT id, nom FROM MODULES";
+    connection.query(query, (err, result) => {
+        if (err) return res.status(400).json({ message: "Erreur lors de l'affichage des modules" });
+        return res.status(200).json(result);
+    });
+});
+
+
+router.post('/Enseignement', isAuthenticated, (req, res) => {
+    const { user_id, module_id } = req.body;
+
+    if (!user_id || !module_id) {
+        return res.status(400).json({ message: "Champs manquants." });
+    }
+
+    const insertQuery = 'INSERT INTO Enseignements (user_id, module_id) VALUES (?, ?)';
+    connection.query(insertQuery, [user_id, module_id], (err, result) => {
+        if (err) {
+            console.error('Erreur MySQL:', err);
+            return res.status(500).json({ message: "Erreur lors de l'insertion." });
+        }
+
+        res.status(201).json({ message: "Assignation réussie." });
+    });
+});
+
+
+
+
+
+//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// la partie de user (enseignant et etudiant):
+
+
 
 
 

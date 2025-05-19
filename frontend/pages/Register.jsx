@@ -4,6 +4,7 @@ import { useState } from "react"
 import { apiRequest } from "../utils/fetchapi"
 import { useNavigate , Link} from "react-router-dom"
 
+import '../src/styleCss/Login.css'
 
 
 
@@ -11,6 +12,7 @@ export function Register(){
     const [prenom, setPrenom] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [nom, setNom] = useState('')
     const navigate = useNavigate()
 
     const handleSubmit = async (e)=>{
@@ -18,7 +20,7 @@ export function Register(){
         
 
         try {
-            const data = await apiRequest("/register", "POST", {prenom: prenom,email:  email, password: password})
+            const data = await apiRequest("/register", "POST", {nom: nom, prenom: prenom,email:  email, password: password})
             alert(data.message)
             navigate('/login')
 
@@ -32,62 +34,75 @@ export function Register(){
 
 
     }
-    const style = {
-        border: '1px solid black',
-        padding : '50px',
-        fontSize: '20px',
-        backgroundColor: 'rgb(12,12,50, 0.3)'
-    }
-
+    
 
 
 
 
 
     return (
-            <div style={{ width: '100%', maxWidth: '400px', margin: 'auto', padding: '2rem' }}>
-                <form onSubmit={handleSubmit}>
-                    <h1 style={{ textAlign: 'center', marginBottom: '1.5rem' , color: 'white' }}>Inscription</h1>
+        <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <h1 className="form-title">Inscription</h1>
+          <div className="form-box">
 
-                    <div style={style}>
-                    <label htmlFor="name">Entrer votre prenom :</label><br/>
-                    <input
-                        type="text"
-                        id="name"
-                        value={prenom}
-                        onChange={e => setPrenom(e.target.value)}
-                        required
-                    /><br/><br/>
+            
+            <label htmlFor="nom">Entrer votre nom :</label><br />
+            <input
+              type="text"
+              id="nom"
+              value={nom}
+              onChange={e => setNom(e.target.value)}
+              required
+              className="form-input"
+            /><br /><br />
+            
 
-                    <label htmlFor="email">Entrer votre email :</label><br/>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                    /><br/><br/>
 
-                    <label htmlFor="password">Entrer votre mot de passe :</label><br/>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                    /><br/><br/>
 
-                    <button type="submit">S'inscrire</button>
-                    </div>
 
-                    <p style={{ marginTop: '1rem', textAlign: 'center' }}>
-                    Déjà un compte ?{' '}
-                    <Link to="/login" style={{ color: '#646cff', textDecoration: 'underline' }}>
-                        Connectez-vous ici
-                    </Link>
-                    </p>
-                </form>
-            </div>
+            <label htmlFor="prenom">Entrer votre prenom :</label><br />
+            <input
+              type="text"
+              id="prenom"
+              value={prenom}
+              onChange={e => setPrenom(e.target.value)}
+              required
+              className="form-input"
+            /><br /><br />
+  
+            <label htmlFor="email">Entrer votre email :</label><br />
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              className="form-input"
+            /><br /><br />
+  
+            <label htmlFor="password">Entrer votre mot de passe :</label><br />
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              className="form-input"
+            /><br /><br />
+  
+            <button type="submit" className="form-button">S'inscrire</button>
+          </div>
+  
+          <p className="form-footer">
+            Déjà un compte ?{' '}
+            <Link to="/login" className="form-link">
+              Connectez-vous ici
+            </Link>
+          </p>
+        </form>
+      </div>
+  
 
 
     )

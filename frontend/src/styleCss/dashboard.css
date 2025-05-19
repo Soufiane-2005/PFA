@@ -1,0 +1,99 @@
+/* Navbar Container */
+.Navbar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px; /* ou la hauteur que tu veux */
+    width: 100%;
+    background-color: white;
+    z-index: 1100; /* Plus haut que le Sidebar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Sidebar */
+  .sideBar {
+    position: fixed;
+    top: 60px; /* La même hauteur que la Navbar */
+    left: 0;
+    height: calc(100vh - 60px); /* Prend tout l'espace restant après la navbar */
+    width: 30vw;
+    min-width: 250px;
+    max-width: 400px;
+    background-color: rgb(165, 215, 215);
+    z-index: 1000;
+    padding: 2vh 1vw;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 5px 0 5px -2px rgba(0, 0, 0, 0.3);
+    overflow-y: auto; /* Pour que la sidebar soit scrollable si nécessaire */
+    color: black;
+    text-align: center;
+  }
+  
+  /* Image de profil */
+  .profile-img {
+    width: 60%;
+    max-width: 200px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    margin: 2vh auto;
+    display: block;
+  }
+  
+  /* Conteneur des deux boutons */
+  .sideBar .button-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3vh;
+  }
+  
+  /* Styles des boutons */
+  .sideBar button {
+    font-size: 1vw;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    background-color: #004080;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    min-width: 100px;
+  }
+  
+  .sideBar button:hover {
+    background-color: #0059b3;
+  }
+  
+  /* Responsive mobile */
+  @media (max-width: 768px) {
+    .sideBar {
+      width: 90vw;
+      font-size: 4vw;
+    }
+  
+    .profile-img {
+      width: 50%;
+    }
+  
+    .sideBar button {
+      font-size: 3vw;
+      padding: 8px 10px;
+    }
+  
+    .sideBar .button-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  
+ 
+ 

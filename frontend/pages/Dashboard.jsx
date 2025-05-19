@@ -1,58 +1,29 @@
-import { useNavigate } from "react-router-dom"
-import { apiRequest } from "../utils/fetchapi"
-import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
-import Cookies from "js-cookie";
+import { useState } from "react";
+import { Navbar } from "../components/Navbar";
+import { Usersidebar } from "../components/Usersidebar"; // Assure-toi que le chemin est correct
+import '../src/styleCss/dashboard.css'
+
+export function Dashboard() {
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar(prev => !prev);
+  };
+
+  return (
+    <div className="page-container">
+      <Navbar onImageClick={toggleSidebar} />
+      {showSidebar && <Usersidebar/>}
 
 
 
-
-export function Dashboard(){
-    const { user} = useContext(AuthContext);
-
-    const navigate = useNavigate()
-
-    console.log(user)
+      <div className="container">
+      
 
 
 
-
-    const handleLogout = async ()=>{
-        try{
-
-            const data = await apiRequest('/logout', 'POST')
-            alert(data.message)
-
-            navigate('/login')
-
-        }catch(err){
-            alert(err.message)
-
-        }
-        
-        
-    }
-
-
-
-
-    return (
-        <>
-
-        <h1>Salut🖐 {user.prenom}</h1>
-        <p>your information are: </p>
-
-        <p>{JSON.stringify(user, null, 2)}</p>
-   
-
-
-
-        <div>je suis dans le dashboard</div>
-
-
-        <button onClick={handleLogout}>se deconnecter</button>
-        </>
-
-    )
-
+      </div>
+      
+    </div>
+  );
 }

@@ -5,6 +5,7 @@ import { apiRequest } from "../utils/fetchapi"
 import { useNavigate , Link} from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
 import Cookies               from "js-cookie";
+import '../src/styleCss/Login.css'
 
 
 
@@ -17,7 +18,7 @@ export function Login(){
     const {loadUser} = useContext(AuthContext)
 
 
-    const hasndlesubmit = async (e)=>{
+    const handleSubmit = async (e)=>{
         e.preventDefault()
 
         
@@ -54,13 +55,7 @@ export function Login(){
 
     }
 
-    const style = {
-        border: '1px solid black',
-        padding : '50px',
-        fontSize: '20px',
-        backgroundColor: 'rgb(12,12,50, 0.3)'
-    }
-
+   
 
 
 
@@ -68,35 +63,36 @@ export function Login(){
 
 
     return (
-        <div style={{ width: '100%', maxWidth: '400px', margin: 'auto', padding: '2rem' }}>
-      <form onSubmit={hasndlesubmit}>
-        <h1 style={{ textAlign: 'center', marginBottom: '1.5rem' , color: 'white'}}>Login</h1>
-
-        <div style={style}>
-          <label htmlFor="email">Entrer votre email :</label><br/>
+      <div className="form-container">
+      <form onSubmit={handleSubmit}>
+        <h1 className="form-title">Login</h1>
+        <div className="form-box">
+          <label htmlFor="email">Entrer votre email :</label><br />
           <input
             type="email"
             id="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-          /><br/><br/>
+            className="form-input"
+          /><br /><br />
 
-          <label htmlFor="password">Entrer votre mot de passe :</label><br/>
+          <label htmlFor="password">Entrer votre mot de passe :</label><br />
           <input
             type="password"
             id="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
-          /><br/><br/>
+            className="form-input"
+          /><br /><br />
 
-          <button type="submit">Se connecter</button>
+          <button type="submit" className="form-button">Se connecter</button>
         </div>
 
-        <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+        <p className="form-footer">
           Pas de compte ?{' '}
-          <Link to="/" style={{ color: '#646cff', textDecoration: 'underline' }}>
+          <Link to="/" className="form-link">
             Inscrivez‑vous ici
           </Link>
         </p>

@@ -1,5 +1,5 @@
 .alert-form {
-  background-color: #ffffff;
+  background-color: #fcfcfc;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   width: 100%;
@@ -7,6 +7,7 @@
   margin: 40px auto;
   padding: 30px;
   font-family: 'Segoe UI', sans-serif;
+  box-shadow: #333;
 }
 
 .alert-form h2 {

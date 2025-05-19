@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import '../../src/styleCss/modifierinfo.css';
 import { apiRequest } from '../../utils/fetchapi';
-import { useNavigate } from 'react-router-dom';
 
 
 export function Modifierinfo() {
@@ -9,7 +8,6 @@ export function Modifierinfo() {
     const [nom, setNom] = useState('');
     const [email, setEmail] = useState('');
     const [numero_telephone, setNumeroTelephone] = useState('');
-    const navigate = useNavigate()
 
     const handlSubmit = async (e) => {
         e.preventDefault(); // empêcher le rechargement de la page
@@ -24,7 +22,6 @@ export function Modifierinfo() {
         try {
             const data = await apiRequest('/modifier-info', 'PUT', body);
             alert(data.message)            
-            navigate('/Admin')
         } catch (error) {
             alert(error); 
         }

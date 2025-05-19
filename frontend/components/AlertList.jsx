@@ -31,6 +31,7 @@ export default function AlertList({ alertsData, setAlertsData }) {
         try {
             const data = await apiRequest(`/Alerts/${id}`, 'PUT' , {titre, contenu})
             alert(data.message)
+            
         } catch (error) {
             alert(error)
         }

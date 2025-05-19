@@ -4,53 +4,40 @@ import { apiRequest } from '../../utils/fetchapi';
 
 export function Enseignant() {
     const [action, setAction] = useState('ajouter');
+    const [nom, setNom] = useState('');
     const [prenom, setPrenom] = useState('');
     const [email, setEmail] = useState('');
+    const [ancienEmail, setAncienEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (action === 'ajouter') {
-            try{
+
+        try {
+            if (action === 'ajouter') {
                 const data = await apiRequest('/AjouterEnseignant', 'POST', {
+                    nom,
                     prenom,
                     email,
                     password
-                })
-               
-                alert(data.message)
+                });
+                alert(data.message);
 
-            }catch(err){
-                
-                alert(err)
-            }
-            
-
-        } else if (action === 'modifier') {
-            try {
+            } else if (action === 'modifier') {
                 const data = await apiRequest('/ModifierEnseignant', 'PUT', {
+                    nom,
                     prenom,
+                    ancienEmail,
                     email
-                })
-                alert(data.message)
-                
-            } catch (error) {
-                alert(error)
-                
-            }
-            
+                });
+                alert(data.message);
 
-
-        } else if (action === 'supprimer') {
-            try {
-                const data = await apiRequest(`/SupprimerEnseignant/${email}`, 'DELETE',)
-                alert(data.message)
-                
-            } catch (error) {
-                alert(error)
-                
+            } else if (action === 'supprimer') {
+                const data = await apiRequest(`/SupprimerEnseignant/${email}`, 'DELETE');
+                alert(data.message);
             }
+        } catch (error) {
+            alert(error);
         }
     };
 
@@ -58,7 +45,7 @@ export function Enseignant() {
         <div className="modifier-container">
             <h1>Ajouter, Modifier, Supprimer enseignant</h1>
             <form className="modifier-form" onSubmit={handleSubmit}>
-                
+
                 <label>Action :</label>
                 <select value={action} onChange={(e) => setAction(e.target.value)}>
                     <option value="ajouter">Ajouter</option>
@@ -66,40 +53,84 @@ export function Enseignant() {
                     <option value="supprimer">Supprimer</option>
                 </select>
 
-                {action !== 'supprimer' && (
+                {action === 'ajouter' && (
                     <>
+                        <label>Nom: </label>
+                        <input
+                            type="text"
+                            value={nom}
+                            onChange={(e)=>setNom(e.target.value)}
+                        />
+
                         <label>Prénom :</label>
                         <input
                             type="text"
-                            name="prenom"
-                            placeholder="Entrez le prénom"
                             value={prenom}
                             onChange={(e) => setPrenom(e.target.value)}
-                            required={action !== 'supprimer'}
-                            
+                            required
+                        />
+
+                        <label>Email :</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+
+                        <label>Mot de passe :</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </>
                 )}
 
-                <label>Email :</label>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Entrez l'email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-
-                {action === 'ajouter' && (
+                {action === 'modifier' && (
                     <>
-                        <label>Mot de passe :</label>
+                        <label>Nom :</label>
                         <input
-                            type="password"
-                            name="password"
-                            placeholder="Entrez le mot de passe"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            type="text"
+                            value={nom}
+                            onChange={(e) => setNom(e.target.value)}
+                            required
+                        />
+
+                        <label>Prénom :</label>
+                        <input
+                            type="text"
+                            value={prenom}
+                            onChange={(e) => setPrenom(e.target.value)}
+                            required
+                        />
+
+                        <label>Email précédent :</label>
+                        <input
+                            type="email"
+                            value={ancienEmail}
+                            onChange={(e) => setAncienEmail(e.target.value)}
+                            required
+                        />
+
+                        <label>Nouvel email :</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </>
+                )}
+
+                {action === 'supprimer' && (
+                    <>
+                        <label>Email :</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </>
